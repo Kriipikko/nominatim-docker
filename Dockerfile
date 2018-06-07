@@ -34,6 +34,7 @@ ARG POSTGIS_VERSION=2.4
 # Install build dependencies
 USER root
 RUN apt-get install -y --no-install-recommends \
+	  dos2unix \
       apache2 \
       build-essential \
       ca-certificates \
@@ -84,7 +85,7 @@ USER nominatim
 ARG REPLICATION_URL=https://planet.osm.org/replication/hour/
 WORKDIR /srv/nominatim
 RUN git config --global core.autocrlf input
-RUN git clone --recursive git://github.com/openstreetmap/Nominatim.git
+RUN git clone --recursive git://github.com/openstreetmap/Nominatim.git --config core.autocrlf=input
 RUN echo $'<?php\n\
       # Paths
       @define('CONST_Postgresql_Version', '${PGSQL_VERSION}'); \n\
