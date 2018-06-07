@@ -75,10 +75,10 @@ RUN pip install osmium
 
 # Create nominatim user account
 USER root
-RUN useradd -d /srv/nominatim -s /bin/bash -m nominatim
+RUN useradd -d /srv/nominatim -s /bin/bash -m nominatim && echo "nominatim:nominatim" | chpasswd && adduser nominatim sudo
 ENV USERNAME nominatim
 ENV USERHOME /srv/nominatim
-RUN chmod a+x ${USERHOME}
+RUN chmod -R 777 ${USERHOME}
 
 # Install Nominatim
 USER nominatim
@@ -112,12 +112,12 @@ ARG PBF_URL=https://planet.osm.org/pbf/planet-latest.osm.pbf
 RUN curl -L ${PBF_URL} --create-dirs -o /srv/nominatim/src/data.osm.pbf
 
 # Filter administrative boundaries
-USER nominatim
-ARG BUILD_THREADS=16
-ARG IMPORT_ADMINISTRATIVE=false
-COPY scripts/filter_administrative.sh \
-      /srv/nominatim/scripts/filter_administrative.sh
-RUN /srv/nominatim/scripts/filter_administrative.sh
+#USER nominatim
+#ARG BUILD_THREADS=16
+#ARG IMPORT_ADMINISTRATIVE=false
+#COPY scripts/filter_administrative.sh \
+#      /srv/nominatim/scripts/filter_administrative.sh
+#RUN /srv/nominatim/scripts/filter_administrative.sh
 
 # Add postgresql users
 USER root
