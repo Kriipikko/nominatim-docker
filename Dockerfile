@@ -83,6 +83,7 @@ RUN chmod a+x ${USERHOME}
 USER nominatim
 ARG REPLICATION_URL=https://planet.osm.org/replication/hour/
 WORKDIR /srv/nominatim
+RUN git config --global core.autocrlf input
 RUN git clone --recursive git://github.com/openstreetmap/Nominatim.git
 RUN echo $'<?php\n\
       # Paths
